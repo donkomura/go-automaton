@@ -1,2 +1,2 @@
-# go-dfa-judgementer
-This DFA accept or abort target binary expression
+# go-automaton
+Automaton implements by Golang
