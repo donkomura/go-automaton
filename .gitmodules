@@ -1,0 +1,3 @@
+[submodule "golang-build"]
+	path = golang-build
+	url = https://github.com/donkomura/golang-build.git
