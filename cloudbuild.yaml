@@ -1,0 +1,23 @@
+steps:
+- name: 'gcr.io/cloud-builders/go'
+  args: ['fmt']
+  env: ['PROJECT_ROOT=$REPO_NAME']
+- name: 'gcr.io/cloud-builders/go'
+  args: ['vet']
+  env: ['PROJECT_ROOT=$REPO_NAME']
+- name: 'gcr.io/cloud-builders/go'
+  args: ['test']
+  env: ['PROJECT_ROOT=$REPO_NAME']
+- name: 'gcr.io/cloud-builders/go'
+  args: ['install']
+  env: ['PROJECT_ROOT=$REPO_NAME']
+- name: 'gcr.io/cloud-builders/docker'
+  args: 
+    - 'build'
+    - '--build-arg'
+    - 'REPO_NAME=$REPO_NAME'
+    - '-t'
+    - 'gcr.io/$PROJECT_ID/$REPO_NAME:latest'
+    - '.'
+images:
+  - 'gcr.io/$PROJECT_ID/$REPO_NAME:latest'
