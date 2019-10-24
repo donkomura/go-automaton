@@ -3,25 +3,22 @@ package main
 import (
 	"log"
 	"os"
+
+	"github.com/donkomura/go-automaton/model"
 )
 
-type Tuple struct {
-	Label string
-	Bin   string
-}
-
-var m map[Tuple]string
+var G *model.Graph = &model.Graph{}
 
 func Init() {
-	m = make(map[Tuple]string)
-	m[Tuple{"", "0"}] = "A"
-	m[Tuple{"", "1"}] = "A"
-	m[Tuple{"A", "0"}] = "A"
-	m[Tuple{"A", "1"}] = "B"
-	m[Tuple{"B", "0"}] = "C"
-	m[Tuple{"B", "1"}] = "B"
-	m[Tuple{"C", "0"}] = "C"
-	m[Tuple{"C", "1"}] = "C"
+	G.CreateInit(model.NewNode("", "", ""))
+	G.Add(model.NewNode("", "A", "0"))
+	G.Add(model.NewNode("", "A", "1"))
+	G.Add(model.NewNode("A", "A", "0"))
+	G.Add(model.NewNode("A", "B", "1"))
+	G.Add(model.NewNode("B", "C", "1"))
+	G.Add(model.NewNode("B", "B", "0"))
+	G.Add(model.NewNode("C", "C", "0"))
+	G.Add(model.NewNode("C", "C", "1"))
 }
 
 func main() {
@@ -31,12 +28,12 @@ func main() {
 	input := os.Args[1]
 
 	Init()
-	state := ""
-	for _, ch := range input {
-		state = m[Tuple{state, string(ch)}]
+	state := G.InitNode.Current
+	for _, s := range input {
+		state = G.Trans(state, model.Token(s))
 	}
 
-	if state == "C" {
+	if state == model.Label("C") {
 		log.Print("Accepted.")
 	} else {
 		log.Print("Invalid")

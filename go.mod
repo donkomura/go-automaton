@@ -1,3 +1,3 @@
-module github.com/donkomura/go-dfa-judgementer
+module github.com/donkomura/go-automaton
 
 go 1.13
