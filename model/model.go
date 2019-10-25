@@ -4,15 +4,15 @@ type Label string
 type Token string
 
 type Graph struct {
-	InitNode *Node
-	Nodes    []*Node
-	FinNodes []*Node
+	InitLabel Label
+	Nodes     []*Node
+	FinLabels []Label
 }
 
 type Node struct {
-	Current Label
-	Next    Label
-	Direct  Token
+	From   Label
+	To     Label
+	Direct Token
 }
 
 type DFA interface {

@@ -15,7 +15,7 @@ type Arrows struct {
 	Direct string `json:"direct,omitempty"`
 }
 
-func NewGraph(file, name string) (*ast.Graph, error) {
+func GetGraph(file, name string) (*ast.Graph, error) {
 	d, err := dot.ParseFile(file)
 	if err != nil {
 		return nil, err
@@ -47,4 +47,18 @@ func GatherArrows(g *ast.Graph) []*Arrows {
 		}
 	}
 	return arrows
+}
+
+func GetFinLabels(g *ast.Graph) []string {
+	var res []string
+	for _, stmt := range g.Stmts {
+		if nodeStmt, ok := stmt.(*ast.NodeStmt); ok {
+			for _, attr := range nodeStmt.Attrs {
+				if attr.Val == "doublecircle" {
+					res = append(res, nodeStmt.Node.ID)
+				}
+			}
+		}
+	}
+	return res
 }

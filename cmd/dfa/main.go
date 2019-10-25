@@ -11,8 +11,7 @@ import (
 var G *model.Graph = &model.Graph{}
 
 func Init() error {
-	G.CreateInit(model.NewNode("", "", ""))
-	graph, err := dot.NewGraph("sample.dot", "dfa_sample")
+	graph, err := dot.GetGraph("sample.dot", "dfa_sample")
 	if err != nil {
 		return err
 	}
@@ -30,12 +29,13 @@ func main() {
 	input := os.Args[1]
 
 	Init()
-	state := G.InitNode.Current
+
+	state := G.InitLabel
 	for _, s := range input {
 		state = G.Trans(state, model.Token(s))
 	}
 
-	if state == model.Label("A") {
+	if G.IsFinState(state) {
 		log.Print("Accepted.")
 	} else {
 		log.Print("Invalid")
