@@ -2,7 +2,6 @@ package dot
 
 import (
 	"fmt"
-	"log"
 	"strings"
 
 	"gonum.org/v1/gonum/graph/formats/dot"
@@ -36,13 +35,19 @@ func GatherArrows(g *ast.Graph) []*Arrows {
 			if len(edge.Attrs) != 0 {
 				directs = strings.Split(edge.Attrs[0].Val, ",")
 			}
+			if len(directs) == 0 {
+				arrows = append(arrows, &Arrows{
+					From: edge.From.String(),
+					To:   edge.To.Vertex.String(),
+				})
+			}
 			for _, di := range directs {
+				di = strings.TrimSpace(strings.Trim(di, "\""))
 				arrows = append(arrows, &Arrows{
 					From:   edge.From.String(),
 					To:     edge.To.Vertex.String(),
 					Direct: di,
 				})
-				log.Printf("From: %v, To: %v, Attr: %v\n", edge.From.String(), edge.To.Vertex.String(), di)
 			}
 		}
 	}
