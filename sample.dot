@@ -1,0 +1,24 @@
+digraph dfa_sample {
+  graph [
+    charset = "UTF-8",
+    rankdir = "LR",
+    margin = 0.2
+  ];
+
+  // node define
+  "" [shape = none]
+  A [shape = doublecircle];
+  B [shape = doublecircle];
+  C [shape = doublecircle];
+  D [shape = circle];
+
+  // edge define
+  "" -> A;
+  A -> A [label = "1"];
+  A -> B [label = "0"];
+  B -> A [label = "1"];
+  B -> C [label = "0"];
+  C -> A [label = "0"];
+  C -> D [label = "1"];
+  D -> D [label = "0, 1"];
+}

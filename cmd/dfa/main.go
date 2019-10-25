@@ -4,21 +4,23 @@ import (
 	"log"
 	"os"
 
+	"github.com/donkomura/go-automaton/dot"
 	"github.com/donkomura/go-automaton/model"
 )
 
 var G *model.Graph = &model.Graph{}
 
-func Init() {
+func Init() error {
 	G.CreateInit(model.NewNode("", "", ""))
-	G.Add(model.NewNode("", "A", "0"))
-	G.Add(model.NewNode("", "A", "1"))
-	G.Add(model.NewNode("A", "A", "0"))
-	G.Add(model.NewNode("A", "B", "1"))
-	G.Add(model.NewNode("B", "C", "1"))
-	G.Add(model.NewNode("B", "B", "0"))
-	G.Add(model.NewNode("C", "C", "0"))
-	G.Add(model.NewNode("C", "C", "1"))
+	graph, err := dot.NewGraph("sample.dot", "dfa_sample")
+	if err != nil {
+		return err
+	}
+	arrows := dot.GatherArrows(graph)
+	for _, arrow := range arrows {
+		G.Add(model.NewNode(arrow.From, arrow.To, arrow.Direct))
+	}
+	return nil
 }
 
 func main() {
@@ -33,7 +35,7 @@ func main() {
 		state = G.Trans(state, model.Token(s))
 	}
 
-	if state == model.Label("C") {
+	if state == model.Label("A") {
 		log.Print("Accepted.")
 	} else {
 		log.Print("Invalid")
