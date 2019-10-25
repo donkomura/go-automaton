@@ -11,18 +11,13 @@ import (
 var G *model.Graph = &model.Graph{}
 
 func Init() error {
-	graph, err := dot.GetGraph("sample.dot", "dfa_sample")
+	G.CreateInit(model.NewNode("", "", ""))
+	graph, err := dot.NewGraph("sample.dot", "dfa_sample")
 	if err != nil {
 		return err
 	}
-	for _, l := range dot.GetFinLabels(graph) {
-		G.SetFinLabel(l)
-	}
 	arrows := dot.GatherArrows(graph)
 	for _, arrow := range arrows {
-		if arrow.Direct == "" {
-			G.InitLabel = arrow.To
-		}
 		G.Add(model.NewNode(arrow.From, arrow.To, arrow.Direct))
 	}
 	return nil
@@ -35,12 +30,12 @@ func main() {
 	input := os.Args[1]
 
 	Init()
-	state := G.InitLabel
+	state := G.InitNode.Current
 	for _, s := range input {
-		state = G.Trans(state, string(s))
+		state = G.Trans(state, model.Token(s))
 	}
 
-	if G.IsFinState(state) {
+	if state == model.Label("A") {
 		log.Print("Accepted.")
 	} else {
 		log.Print("Invalid")

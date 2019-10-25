@@ -1,20 +1,24 @@
 package model
 
+type Label string
+type Token string
+
 type Graph struct {
-	InitLabel string
-	Nodes     []*Node
-	FinLabels []string
+	InitNode *Node
+	Nodes    []*Node
+	FinNodes []*Node
 }
 
 type Node struct {
-	From   string
-	To     string
-	Direct string
+	Current Label
+	Next    Label
+	Direct  Token
 }
 
 type DFA interface {
+	CreateInit(*Node)
 	Add(*Node)
-	SetFinLabel(*Node)
+	CreateFins(*Node)
 	Delete(*Node)
-	Trans(*Node, string) *Node
+	Trans(*Node, Token) *Node
 }
