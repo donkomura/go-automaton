@@ -14,7 +14,7 @@ steps:
   args: ['vet', './...']
   env: ['PROJECT_ROOT=$REPO_NAME']
 - name: 'gcr.io/cloud-builders/go'
-  args: ['install']
+  args: ['install', 'cmd/dfa']
   env: ['PROJECT_ROOT=$REPO_NAME']
 - name: 'gcr.io/cloud-builders/docker'
   args: 
