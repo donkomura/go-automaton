@@ -36,8 +36,12 @@ func main() {
 
 	Init()
 	state := G.InitLabel
+	var err error
 	for _, s := range input {
-		state = G.Trans(state, string(s))
+		state, err = G.Trans(state, string(s))
+		if err != nil {
+			log.Fatal(err)
+		}
 	}
 
 	if G.IsFinState(state) {
