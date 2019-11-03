@@ -8,24 +8,24 @@ steps:
       echo "$BRANCH_NAME"
       echo "***********************"
 - name: 'gcr.io/cloud-builders/go'
-  args: ['fmt', './../../...']
+  args: ['fmt', './...']
   env: ['PROJECT_ROOT=$REPO_NAME']
 - name: 'gcr.io/cloud-builders/go'
-  args: ['vet', './../../...']
+  args: ['vet', './...']
   env: ['PROJECT_ROOT=$REPO_NAME']
 - name: 'gcr.io/cloud-builders/go'
   args: ['test']
-  env: ['PROJECT_ROOT=$REPO_NAME']
+  env: ['PROJECT_ROOT=$REPO_NAME/cmd/gat']
 - name: 'gcr.io/cloud-builders/go'
   args: ['install']
-  env: ['PROJECT_ROOT=$REPO_NAME']
+  env: ['PROJECT_ROOT=$REPO_NAME/cmd/gat']
 - name: 'gcr.io/cloud-builders/docker'
   args: 
     - 'build'
     - '--build-arg'
     - 'REPO_NAME=$REPO_NAME'
     - '-t'
-    - 'gcr.io/$PROJECT_ID/$REPO_NAME:latest'
+    - 'gcr.io/$PROJECT_ID/$REPO_NAME/cmd/gat:latest'
     - '.'
 images:
-  - 'gcr.io/$PROJECT_ID/$REPO_NAME:latest'
+  - 'gcr.io/$PROJECT_ID/$REPO_NAME/cmd/gat:latest'
