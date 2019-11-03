@@ -1,6 +1,9 @@
 package model
 
-import "github.com/pkg/errors"
+import (
+	"github.com/donkomura/go-automaton/dot"
+	"github.com/pkg/errors"
+)
 
 func (g *Graph) Add(node *Node) {
 	g.Nodes = append(g.Nodes, node)
@@ -19,7 +22,7 @@ func (g *Graph) Delte(node *Node) error {
 	return nil
 }
 
-func (g *Graph) Trans(s string, t string) (string, error) {
+func (g *Graph) Trans(s, t string) (string, error) {
 	idx, err := find(g.Nodes, s, t)
 	if err != nil {
 		return "", err
@@ -27,12 +30,22 @@ func (g *Graph) Trans(s string, t string) (string, error) {
 	return g.Nodes[idx].To, nil
 }
 
-func NewNode(current, next, direct string) *Node {
-	return &Node{
-		From:   current,
-		To:     next,
-		Direct: direct,
+func (g *Graph) InitGraph(file_name, graph_name string) error {
+	graph, err := dot.GetGraph(file_name, graph_name)
+	if err != nil {
+		return err
 	}
+	for _, l := range dot.GetFinLabels(graph) {
+		g.SetFinLabel(l)
+	}
+	arrows := dot.GatherArrows(graph)
+	for _, arrow := range arrows {
+		if arrow.Direct == "" {
+			g.InitLabel = arrow.To
+		}
+		g.Add(NewNode(arrow.From, arrow.To, arrow.Direct))
+	}
+	return nil
 }
 
 func (g *Graph) IsFinState(s string) bool {
@@ -42,6 +55,14 @@ func (g *Graph) IsFinState(s string) bool {
 		}
 	}
 	return false
+}
+
+func NewNode(current, next, direct string) *Node {
+	return &Node{
+		From:   current,
+		To:     next,
+		Direct: direct,
+	}
 }
 
 func delete(s []*Node, i int) []*Node {
