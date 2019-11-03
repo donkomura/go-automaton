@@ -8,10 +8,10 @@ steps:
       echo "$BRANCH_NAME"
       echo "***********************"
 - name: 'gcr.io/cloud-builders/go'
-  args: ['fmt', './...']
+  args: ['fmt', './../../...']
   env: ['PROJECT_ROOT=$REPO_NAME']
 - name: 'gcr.io/cloud-builders/go'
-  args: ['vet', './...']
+  args: ['vet', './../../...']
   env: ['PROJECT_ROOT=$REPO_NAME']
 - name: 'gcr.io/cloud-builders/go'
   args: ['test']
